@@ -565,13 +565,11 @@ public class DisplayNotificationTask extends AsyncTask<Void, Void, Void> {
   }
 
   private Class getMainActivityClass(Context context) {
-    String packageName = context.getPackageName();
-    Intent launchIntent = context
-      .getPackageManager()
-      .getLaunchIntentForPackage(packageName);
-
     try {
-      return Class.forName(launchIntent.getComponent().getClassName());
+      /**
+       * A patch around https://github.com/invertase/react-native-firebase/issues/1041.
+       */
+      return Class.forName("com.triggrhealth.prototype.MainActivity");
     } catch (ClassNotFoundException e) {
       Log.e(TAG, "Failed to get main activity class", e);
       return null;
