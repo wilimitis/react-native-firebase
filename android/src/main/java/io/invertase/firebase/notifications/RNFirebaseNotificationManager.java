@@ -42,6 +42,11 @@ import io.invertase.firebase.Utils;
 import io.invertase.firebase.messaging.BundleJSONConverter;
 
 public class RNFirebaseNotificationManager {
+  /**
+   * A patch around https://github.com/invertase/react-native-firebase/issues/1041.
+   */
+  private static final String TRIGGR_MAIN_ACTIVITY_CLASS_NAME =
+    "com.triggrhealth.prototype.MainActivity";
   private static final String PREFERENCES_KEY = "RNFNotifications";
   public static final String SCHEDULED_NOTIFICATION_EVENT = "notifications-scheduled-notification";
   private static final String TAG = "RNFNotificationManager";
@@ -545,10 +550,8 @@ public class RNFirebaseNotificationManager {
   }
 
   private Class getMainActivityClass() {
-    String packageName = context.getPackageName();
-    Intent launchIntent = context.getPackageManager().getLaunchIntentForPackage(packageName);
     try {
-      return Class.forName(launchIntent.getComponent().getClassName());
+      return Class.forName(TRIGGR_MAIN_ACTIVITY_CLASS_NAME);
     } catch (ClassNotFoundException e) {
       Log.e(TAG, "Failed to get main activity class", e);
       return null;
